@@ -52,3 +52,4 @@ jobs:
       - name: Update Lambda function
         run: |
           aws lambda update-function-code --function-name EnglishPolisherTelegramBot --zip-file fileb://deployment_package.zip
+          aws lambda publish-version --function-name EnglishPolisherTelegramBot
