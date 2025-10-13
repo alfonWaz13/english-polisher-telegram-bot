@@ -1,0 +1,22 @@
+name: Django CI
+
+on:
+  push:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+    - name: Install Dependencies
+      run: |
+        pip install black flake8 flake8-pyproject
+    - name: Run Black and Flake8
+      run: |
+        make format-check
