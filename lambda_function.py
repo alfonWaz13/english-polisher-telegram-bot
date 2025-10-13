@@ -1,6 +1,5 @@
 import json
 import logging
-import os
 
 import google.generativeai as genai
 import requests
@@ -34,7 +33,7 @@ def lambda_handler(event, context):
             )
 
             requests.post(
-                f"https://api.telegram.org/bot{os.environ.get(TELEGRAM_TOKEN)}/sendMessage",
+                f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
                 json={"chat_id": chat_id, "text": polished_text},
             )
             logger.info("Response sent successfully.")
