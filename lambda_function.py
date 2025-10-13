@@ -1,9 +1,13 @@
 import json
+import logging
 
 import google.generativeai as genai
 
 from config import GOOGLE_AI_API_KEY
 from english_polisher import EnglishPolisher
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 genai.configure(api_key=GOOGLE_AI_API_KEY)
 model = genai.GenerativeModel('gemini-2.0-flash-lite')
