@@ -1,7 +1,11 @@
-name: Django CI
+name: Lambda CI
 
 on:
   push:
+    branches: [ "main" ]
+    paths:
+      - '**.py'
+      - '.github/workflows/ci.yml'
   pull_request:
     branches: [ "main" ]
 
@@ -49,7 +53,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-north-1
 
+      - name: Create new Lambda function version
+        run: |
+          aws lambda publish-version --function-name EnglishPolisherTelegramBot
+
       - name: Update Lambda function
         run: |
           aws lambda update-function-code --function-name EnglishPolisherTelegramBot --zip-file fileb://deployment_package.zip
-          aws lambda publish-version --function-name EnglishPolisherTelegramBot
