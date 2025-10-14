@@ -8,7 +8,7 @@ import google.generativeai as genai
 from config import GOOGLE_AI_API_KEY, TELEGRAM_TOKEN
 from english_polisher import EnglishPolisher
 from telegram import Update
-from telegram.ext import Application, ContextTypes, MessageHandler, filters
+from telegram.ext import Application, ContextTypes, MessageHandler, filters, CommandHandler
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -20,6 +20,10 @@ english_polisher = EnglishPolisher(model=model)
 app = Application.builder().token(TELEGRAM_TOKEN).build()
 
 
+async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.message.reply_text("Hey! I'm here to help. Drop a message to check if it sounds natural in English.")
+
+
 async def polish_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     text = update.message.text
     if text:
@@ -29,7 +33,8 @@ async def polish_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         logger.info("Polished text sent successfully.")
 
 
-app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, polish_message))
+app.add_handler(CommandHandler("start", start_command))
+app.add_handler(MessageHandler(filters.TEXT, polish_message))
 
 
 async def bot_main(telegram_app: Application, event) -> None:
