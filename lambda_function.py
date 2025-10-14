@@ -20,7 +20,7 @@ english_polisher = EnglishPolisher(model=model)
 app = Application.builder().token(TELEGRAM_TOKEN).build()
 
 
-async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def explanation_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text("Hey! I'm here to help. Drop a message to check if it sounds natural in English.")
 
 
@@ -33,7 +33,8 @@ async def polish_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         logger.info("Polished text sent successfully.")
 
 
-app.add_handler(CommandHandler("start", start_command))
+app.add_handler(CommandHandler("start", explanation_command))
+app.add_handler(CommandHandler("help", explanation_command))
 app.add_handler(MessageHandler(filters.TEXT, polish_message))
 
 
