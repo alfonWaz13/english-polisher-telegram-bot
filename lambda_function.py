@@ -1,5 +1,7 @@
+import asyncio
 import json
 import logging
+import traceback
 
 import google.generativeai as genai
 
@@ -30,14 +32,17 @@ async def polish_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, polish_message))
 
 
+async def bot_main(telegram_app: Application, event) -> None:
+    async with telegram_app:
+        await telegram_app.process_update(Update.de_json(json.loads(event["body"]), telegram_app.bot))
+
+
 def lambda_handler(event, context):
     try:
         logger.info(f"Received event: {json.dumps(event)}")
-        body = json.loads(event.get("body", "{}"))
-        update = Update.de_json(body, app.bot)
-        app.update_queue.put_nowait(update)
-        return {"statusCode": 200, "body": json.dumps("Update processed successfully.")}
+        asyncio.run(bot_main(app, event))
 
     except Exception as e:
+        traceback.print_exc()
         logger.error("Error processing message: %s", e)
         return {"statusCode": 500, "body": json.dumps("Error processing request.")}
