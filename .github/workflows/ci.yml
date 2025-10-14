@@ -53,9 +53,18 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-north-1
 
-      - name: Create new Lambda function version
+      - name: Publish new Lambda version
         run: |
-          aws lambda publish-version --function-name EnglishPolisherTelegramBot
+          DATE=$(date '+%Y-%m-%d_%H-%M-%S')
+          VERSION=$(aws lambda publish-version \
+            --function-name EnglishPolisherTelegramBot \
+            --description "Created at $DATE" \
+            --query 'Version' --output text)
+          aws lambda create-alias \
+            --function-name EnglishPolisherTelegramBot \
+            --name "$DATE" \
+            --function-version "$VERSION" \
+            --description "Alias created at $DATE"
 
       - name: Update Lambda function
         run: |
