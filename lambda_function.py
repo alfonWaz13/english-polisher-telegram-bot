@@ -21,7 +21,10 @@ app = Application.builder().token(TELEGRAM_TOKEN).build()
 
 
 async def explanation_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.message.reply_text("Hey! I'm here to help. Drop a message to check if it sounds natural in English.")
+    await update.message.reply_text(
+        "Hey! I'm here to help. Drop me a message to check if it sounds natural in English. Also, you can put a sentence "
+        "in other language and get a natural English translation"
+    )
 
 
 async def polish_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -34,7 +37,6 @@ async def polish_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
 
 app.add_handler(CommandHandler("start", explanation_command))
-app.add_handler(CommandHandler("help", explanation_command))
 app.add_handler(MessageHandler(filters.TEXT, polish_message))
 
 
