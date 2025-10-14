@@ -10,6 +10,7 @@ dependencies = [
     "flake8-pyproject>=1.2.3",
     "google-generativeai>=0.8.5",
     "pre-commit>=4.3.0",
+    "python-telegram-bot>=22.5",
 ]
 
 [tool.black]
